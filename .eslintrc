@@ -1,0 +1,32 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "ecmaFeatures": {
+            "jsx": true,
+            "experimentalObjectRestSpread": true
+        },
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-debugger": "off",
+        "no-console": "off",
+
+        "react/no-children-prop": "off",
+        "react/prop-types": "off",
+        "no-unused-labels": "off",
+        "promise/always-return": "off",
+        "react/no-unescaped-entities": "off"
+    },
+    "plugins": [
+        "react",
+        "promise"
+    ],
+    "extends": ["eslint:recommended","plugin:react/recommended", "plugin:promise/recommended"]
+}
