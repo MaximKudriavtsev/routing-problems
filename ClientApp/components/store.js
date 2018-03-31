@@ -1,12 +1,9 @@
-import * as counter from './counter/reducer';
-import * as fetcher from './fetcher/reducer';
+import * as main from './main/reducer';
 
 export const ApplicationState = {
-    counter: counter.State,
-    fetcher: fetcher.State
+    main: main.State,
 }
 
 export const reducers = {
-    counter: counter.reducer,
-    fetcher: fetcher.reducer
+    main: main.reducer,
 };

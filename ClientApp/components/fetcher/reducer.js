@@ -24,6 +24,18 @@ export const reducer = (state = State, action) => {
                 ...state,
                 dataList: action.payload
             };
+
+        case 'SET_LAT':
+            return {
+                ...state,
+                lat: action.payload
+            };
+
+        case 'SET_LNG':
+            return {
+                ...state,
+                lng: action.payload
+            };
             
         default:
             return state;
