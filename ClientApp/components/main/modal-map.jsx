@@ -77,7 +77,7 @@ export const ModalMap = compose(
     >
       <input
         type="text"
-        placeholder="Customized your placeholder"
+        placeholder={props.from ? "Введите адрес отправления" : "Введите адрес доставки"}
         style={{
           boxSizing: `border-box`,
           border: `1px solid transparent`,
