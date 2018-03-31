@@ -7,15 +7,20 @@ using Newtonsoft.Json.Linq;
 
 namespace CoreReactRedux.Api.Google_Maps
 {
-    public class GoogleService
+    public static class GoogleService
     {
-        public GoogleService() {}
+        private static string _key = "AIzaSyB-PtpIcRabdr28ggUuqCsfE4GGjrZYWi0";
 
-        public async Task<ValueTuple<bool, string>> GoogleRequest()
+        public static ValueTuple<bool, string> GoogleRequest(string from, string to)
+        {
+            return GoogleRequestAsync(from, to).GetAwaiter().GetResult();
+        }
+
+        private static async Task<ValueTuple<bool, string>> GoogleRequestAsync(string from, string to)
         {
             using (var req = new HttpClient())
             {
-                var res = await req.GetAsync($"https://maps.googleapis.com/maps/api/directions/json?origin=54.167687,37.589559&destination=54.171845,37.602219&key=AIzaSyB-PtpIcRabdr28ggUuqCsfE4GGjrZYWi0");
+                var res = await req.GetAsync($"https://maps.googleapis.com/maps/api/directions/json?origin={from}&destination={to}&key={_key}");
                 var resString = await res.Content.ReadAsStringAsync();
                 var resJson = JObject.Parse(resString);
 

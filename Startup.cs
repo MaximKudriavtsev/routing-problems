@@ -21,12 +21,39 @@ namespace CoreReactRedux
 
         public IConfiguration Configuration { get; }
 
+        public void CreateFirst(IServiceProvider serviceProvider)
+        {
+            var db = serviceProvider.GetRequiredService<DataBaseContext>();
+
+            db.Database.Migrate();
+            var unitFromDb = db.Units.OrderBy(u => u.UnitId).FirstOrDefault();
+            if (unitFromDb == null)
+            {
+                var unitsConfig = Configuration.GetSection("units").GetChildren();
+                foreach (var unitConfig in unitsConfig)
+                {
+                    var unit = new Unit()
+                    {
+                        Origin = unitConfig["origin"],
+                        Volume = Convert.ToInt32(unitConfig["volume"])
+                    };
+                    db.Units.Add(unit);
+                }
+                db.SaveChanges();
+            }
+
+            db.Dispose();
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataBaseContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("MyDataBase"));
             });
+
+            var serviceProvider = services.BuildServiceProvider();
+            CreateFirst(serviceProvider);
 
             services.AddMvc();
         }

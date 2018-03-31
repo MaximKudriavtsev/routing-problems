@@ -4,32 +4,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using CoreReactRedux.Api.Google_Maps;
 using Microsoft.AspNetCore.Mvc;
+using CoreReactRedux.Models;
 
 namespace CoreReactRedux.Controllers
 {
     [Route("api")]
     public class GoogleController : Controller
     {
-        private GoogleService _service;
+        private DataBaseContext _db;
 
-
-        public GoogleController()
+        public GoogleController([FromServices] DataBaseContext db)
         {
-            _service = new GoogleService();
+            _db = db;
         }
 
-        [HttpPost("[action]")]
-        public async void Google()
+        [HttpGet("[action]")]
+        public void AddPoint([FromQuery] string from, [FromQuery] string to, [FromQuery] int volume)
         {
-            var result = await _service.GoogleRequest();
-            if (result.Item1)
-            {
+            _db.AddNewPoint(from, to, volume);
+        }
 
-            }
-            else
-            {
-
-            }
+        [HttpGet("[action]")]
+        public void Clean()
+        {
+            _db.Cleane();
         }
     }
 }
