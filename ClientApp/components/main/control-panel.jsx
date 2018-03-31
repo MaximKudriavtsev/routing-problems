@@ -1,16 +1,21 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { Button, CardFooter } from 'reactstrap';
+import * as actionCreators from "./actions";
 
-export default class ControlPanel extends React.PureComponent {
+class ControlPanel extends React.PureComponent {
   render() {
     const { toggleModal } = this.props;
+    const onAddButtonClick = () => {
+      toggleModal();
+    };
 
     return (
       <React.Fragment>
         <CardFooter>
             <Button 
               color="primary"
-              onClick={toggleModal}
+              onClick={onAddButtonClick}
             >
               Добавить заказчика
             </Button>
@@ -25,3 +30,10 @@ export default class ControlPanel extends React.PureComponent {
     );
   }
 }
+
+export default connect(
+  state => ({
+      main: state.main
+  }),
+  (actionCreators)
+)(ControlPanel);

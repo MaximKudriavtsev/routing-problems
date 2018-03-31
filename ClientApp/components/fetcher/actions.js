@@ -5,35 +5,50 @@ import { fetch, addTask } from 'domain-task';
 
 export const PostData = (text) => (dispatch) => {
     const fetchTask = fetch('/api/PostParent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
-            body: JSON.stringify({ Data: text })
-        }).then(val => {
-            console.log(val);
-            dispatch({type: t.PostDataSuccess});
-        }).catch(err => {
-            console.log(err);
-            dispatch({type: t.PostDataError});
-        });
-    
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+        body: JSON.stringify({ Data: text })
+    }).then(val => {
+        console.log(val);
+        dispatch({ type: t.PostDataSuccess });
+    }).catch(err => {
+        console.log(err);
+        dispatch({ type: t.PostDataError });
+    });
+
     addTask(fetchTask);
-    dispatch({type: t.PostDataRequest});
+    dispatch({ type: t.PostDataRequest });
 };
 
 export const GetData = () => (dispatch) => {
     const fetchTask = fetch('/api/GetParentsList', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json; charset=UTF-8' },
-        }).then(val => {
-            return val.json();
-        }).then(res => {
-            dispatch({type: t.GetDataSuccess, payload: res});
-        })
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+    }).then(val => {
+        return val.json();
+    }).then(res => {
+        dispatch({ type: t.GetDataSuccess, payload: res });
+    })
         .catch(err => {
             console.log(err);
-            dispatch({type: t.GetDataError});
+            dispatch({ type: t.GetDataError });
         });
 
     addTask(fetchTask);
-    dispatch({type: t.GetDataRequest});
+    dispatch({ type: t.GetDataRequest });
+};
+
+
+export const setLat = (lat) => {
+    return ({
+        value: lat,
+        payload: 'SET_LAT'
+    });
+};
+
+export const setLng = (lng) => {
+    return ({
+        value: lng,
+        payload: 'SET_LNG'
+    });
 };

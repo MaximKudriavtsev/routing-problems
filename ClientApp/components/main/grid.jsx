@@ -1,8 +1,5 @@
 import React from "react";
 import {
-  EditingState
-} from "@devexpress/dx-react-grid";
-import {
   Grid as DXGrid,
   Table,
   TableHeaderRow
@@ -17,19 +14,16 @@ export default class Grid extends React.PureComponent {
         { name: "id", title: "ID" },
         { name: "from", title: "Начальный адрес" },
         { name: "to", title: "Конечный адрес" },
-        { name: "weight", title: "Масса груза" },
+        { name: "volume", title: "Объем груза" },
       ]
     };
   }
   render() {
-    const { commitChanges, rows } = this.props;
+    const { rows } = this.props;
     const { columns } = this.state;
 
     return (
       <DXGrid rows={rows} columns={columns}>
-        <EditingState
-          onCommitChanges={commitChanges}
-        />
         <Table />
         <TableHeaderRow />
       </DXGrid>
