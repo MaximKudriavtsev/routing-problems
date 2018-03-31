@@ -4,15 +4,15 @@
   "description": "rail_core_react_redux",
   "scripts": {
     "clean": "IF EXIST %CD%\\wwwroot\\dist rd /s /q %CD%\\wwwroot\\dist && IF EXIST %CD%\\ClientApp\\dist rd /s /q %CD%\\ClientApp\\dist",
-    "buildDev": "npm run clean && node node_modules/webpack/bin/webpack.js --display-error-details",
+    "buildDev": "node node_modules/webpack/bin/webpack.js --display-error-details",
     "buildProd": "npm run clean && node node_modules/webpack/bin/webpack.js --env.prod"
   },
   "dependencies": {
     "promise-polyfill": "7.1.0",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-redux": "^5.0.5",
-    "react-router-dom": "^4.1.1",
+    "react-router-dom": "^4.2.2",
     "react-router-redux": "5.0.0-alpha.6",
     "redux": "^3.7.1",
     "redux-thunk": "^2.2.0"
