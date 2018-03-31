@@ -10,8 +10,8 @@ class Result extends React.PureComponent {
     let template;
     if (loading) {
       template = () => (<div>Загрузка машины...</div>);
-    } else if (resultPoints.length === 0) {
-      template = () => (<div>Нечего показывать...</div>);
+    } else if (resultPoints.length !== 0) { // !!!!!!!!!!!!!!!S
+      template = () => (<div>Маршрут не построен</div>);
     } else {
       template = () => (
         <Card style={{ marginTop: '20px' }}>
@@ -24,7 +24,6 @@ class Result extends React.PureComponent {
         </Card>
       );
     }
-    debugger;
     return template();
   }
 }
