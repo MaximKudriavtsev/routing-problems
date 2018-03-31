@@ -5,14 +5,20 @@ export const State = {
     to: '',
     showModal: false,
     rows: [
-      { id: 0, from: "Paris", to: "Las Vegas", volume: "300" },
-      { id: 1, from: "Austin", to: "Paris", volume: "100" },
-      { id: 2, from: "Las Vegas", to: "Paris", volume: "150" },
-      { id: 3, from: "Austin", to: "Paris", volume: "230" },
-      { id: 4, from: "Las Vegas", to: "Austin", volume: "450" }
+      { id: 0, from: "-33.890542,151.274856", to: "-33.923036,151.259052", volume: "300" },
+      { id: 1, from: "-34.028249,151.157507", to: "-33.80010128657071,151.28747820854187", volume: "100" },
+      { id: 2, from: "-33.950198,151.259302", to: "-33.923036,151.157507", volume: "150" },
     ],
     volume: 0,
 }
+
+// locations = [
+//     ['Bondi Beach', -33.890542, 151.274856, 4],
+//     ['Coogee Beach', -33.923036, 151.259052, 5],
+//     ['Cronulla Beach', -34.028249, 151.157507, 3],
+//     ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+//     ['Maroubra Beach', -33.950198, 151.259302, 1]
+//   ];
 
 export const reducer = (state = State, action) => {
     switch (action.type) {
