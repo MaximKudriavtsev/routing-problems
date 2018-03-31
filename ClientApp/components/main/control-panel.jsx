@@ -3,11 +3,14 @@ import { Button, CardFooter } from 'reactstrap';
 
 export default class ControlPanel extends React.PureComponent {
   render() {
+    const { toggleModal } = this.props;
+
     return (
       <React.Fragment>
         <CardFooter>
             <Button 
               color="primary"
+              onClick={toggleModal}
             >
               Добавить заказчика
             </Button>
