@@ -1,5 +1,4 @@
-// ----------------
-// ACTION CREATORS
+import { fetch, addTask } from 'domain-task';
 
 export const setVolume = (volume) => {
   return ({
@@ -48,3 +47,21 @@ export const toggleModal = () => {
     type: 'TOGGLE_MODAL'
   });
 }
+
+export const postData = (text) => (dispatch) => {
+  const fetchTask = fetch('/api/AddPoint', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+      body: JSON.stringify({ Data: text })
+  }).then(val => {
+      console.log(val);
+      dispatch({ type: 'RESPONSE' });
+  }).catch(err => {
+      console.log(err);
+      dispatch({ type: 'ERROR' });
+  });
+
+  console.log('ushlo');
+  addTask(fetchTask);
+  dispatch({ type: 'LOADING' });
+};

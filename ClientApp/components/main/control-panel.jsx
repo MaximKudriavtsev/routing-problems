@@ -5,7 +5,8 @@ import * as actionCreators from "./actions";
 
 class ControlPanel extends React.PureComponent {
   render() {
-    const { toggleModal } = this.props;
+    const { toggleModal, postData } = this.props;
+    const { rows } = this.props.main;
     const onAddButtonClick = () => {
       toggleModal();
     };
@@ -22,6 +23,7 @@ class ControlPanel extends React.PureComponent {
             <Button
               color="primary"
               style={{ marginLeft: '10px' }}
+              onClick={() => postData(rows)}
             >
               Вычислить маршрут
             </Button>
