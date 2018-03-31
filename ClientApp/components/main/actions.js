@@ -22,6 +22,20 @@ export const setLng = (lng) => {
     });
 };
 
+export const setFrom = (from) => {
+  return ({
+      payload: from,
+      type: 'SET_FROM'
+  });
+};
+
+export const setTo = (to) => {
+  return ({
+      payload: to,
+      type: 'SET_TO'
+  });
+};
+
 export const addRow = (row) => {
   return ({
     payload: row,

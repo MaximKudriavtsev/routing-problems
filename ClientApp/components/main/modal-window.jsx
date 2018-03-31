@@ -6,12 +6,12 @@ import { ModalMap } from './modal-map';
 
 class ModalWindow extends React.PureComponent {
   render() {
-    const { toggleModal, setLat, setLng, addRow, setVolume } = this.props;
-    const { showModal, lat, lng, volume } = this.props.main;
+    const { toggleModal, addRow, setVolume, setFrom, setTo } = this.props;
+    const { showModal, volume, from, to } = this.props.main;
     
-    const onButtonAddClick = (_lat, _lng, _volume) => {
+    const onButtonAddClick = (_from, _to, _volume) => {
       debugger;
-      addRow({ from: _lat, to: _lng, volume: _volume });
+      addRow({ from: _from, to: _to, volume: _volume });
       toggleModal();
     };
 
@@ -25,23 +25,21 @@ class ModalWindow extends React.PureComponent {
         </ModalHeader>
         <ModalBody>
           <ModalMap
-            className="px-1"
-            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGaF4cA3wqi33FzmapotsZFDErzY8wFmE&v=3.exp&libraries=geometry,drawing,places"
-            loadingElement={<div style={{ height: `100%` }} />}
-            containerElement={<div style={{ height: `400px` }} />}
-            mapElement={<div style={{ height: `100%` }} />}
-            actions={{ setLng, setLat }}
+            setData={setFrom}
+          />
+          <ModalMap
+            setData={setTo}
           />
           <div className="input-group mb-3">
             <div className="input-group-prepend">
-              <span className="input-group-text" id="basic-addon1">кг</span>
+              <span className="input-group-text" id="basic-addon1">м3</span>
             </div>
-            <input onChange={e => setVolume(e.target.value)} type="text" className="form-control" placeholder="Вес товара" aria-label="Username" aria-describedby="basic-addon1" />
+            <input onChange={e => setVolume(e.target.value)} type="text" className="form-control" placeholder="Объем товара" aria-label="Username" aria-describedby="basic-addon1" />
           </div>
         </ModalBody>
         <ModalFooter>
           <Button
-            onClick={() => onButtonAddClick(lat, lng, volume)}
+            onClick={() => onButtonAddClick(from, to, volume)}
           >
             Добавить
           </Button>

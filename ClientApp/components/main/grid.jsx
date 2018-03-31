@@ -14,7 +14,7 @@ export default class Grid extends React.PureComponent {
         { name: "id", title: "ID" },
         { name: "from", title: "Начальный адрес" },
         { name: "to", title: "Конечный адрес" },
-        { name: "volume", title: "Масса груза" },
+        { name: "volume", title: "Объем груза" },
       ]
     };
   }

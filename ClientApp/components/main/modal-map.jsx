@@ -94,8 +94,9 @@ export const ModalMap = compose(
       />
     </SearchBox>
     {props.markers.map((marker, index) => {
-      props.actions.setLng(marker.position.lng());
-      props.actions.setLat(marker.position.lat());
+      const lng = marker.position.lng().toString();
+      const lat = marker.position.lat().toString();
+      props.setData(`${lat},${lng}`);
 
       return <Marker key={index} position={marker.position} />
     }

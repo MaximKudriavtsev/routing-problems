@@ -1,6 +1,8 @@
 export const State = {
     lat: 0,
     lng: 0,
+    from: '',
+    to: '',
     showModal: false,
     rows: [
       { id: 0, from: "Paris", to: "Las Vegas", volume: "300" },
@@ -29,6 +31,26 @@ export const reducer = (state = State, action) => {
                 return {
                     ...state,
                     lng: action.payload
+                };
+            }
+            return state;
+        }
+
+        case 'SET_FROM':  {
+            if (state.lat !== action.payload) {
+                return {
+                    ...state,
+                    from: action.payload
+                };
+            }
+            return state;
+        }
+
+        case 'SET_TO': {
+            if (state.lng !== action.payload) {
+                return {
+                    ...state,
+                    to: action.payload
                 };
             }
             return state;
