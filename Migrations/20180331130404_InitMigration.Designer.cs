@@ -11,9 +11,10 @@ using System;
 namespace CoreReactRedux.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20180331130404_InitMigration")]
+    partial class InitMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +26,7 @@ namespace CoreReactRedux.Migrations
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Cache")
+                    b.Property<string>("Payload")
                         .IsRequired();
 
                     b.HasKey("OrderId");
