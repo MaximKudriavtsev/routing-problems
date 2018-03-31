@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Algoritm {
+namespace CoreReactRedux.Algoritm {
     public class CalcTable {
         List<List<int>> distances;
         List<int> volumes;

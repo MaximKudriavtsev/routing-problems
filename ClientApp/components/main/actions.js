@@ -52,7 +52,7 @@ export const postData = (text) => (dispatch) => {
   const fetchTask = fetch('/api/AddPoint', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json; charset=UTF-8' },
-      body: JSON.stringify({ Data: text })
+      body: JSON.stringify(text)
   }).then(val => {
       console.log(val);
       dispatch({ type: 'RESPONSE' });
