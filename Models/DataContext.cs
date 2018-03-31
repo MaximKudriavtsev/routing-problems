@@ -1,67 +1,191 @@
-﻿using CoreReactRedux.Models.ModelsView;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using CoreReactRedux.Api.Google_Maps;
 
 namespace CoreReactRedux.Models
 {
-    public class DataBaseContext: DbContext
+    public class DataBaseContext : DbContext
     {
-        static private object lockObj = new object();
-
         public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options) { }
 
-        public DbSet<DataClassParent> DataClassParentTable { get; set; }
-        public DbSet<DataClassChild> DataClassChildTable { get; set; }
+        public DbSet<Unit> Units { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Point> Points { get; set; }
 
-        public async Task<List<DataClassParent>> GetAllParents()
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //}
+
+        //public async Task<Unit> CreateNewUnit()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public void GetUnit()
         {
-            var result = from p in DataClassParentTable
-                         select p;
-
-            return await result.ToListAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<List<DataClassChild>> GetAllChildrens(int parentId)
+        public void AddNewPoint(string from, string to, int volume)
         {
-            var result = from p in DataClassParentTable
-                         join c in DataClassChildTable on p.ParentId equals c.ParentId
-                         where p.ParentId == parentId
-                         select c;
+            var order = Orders.OrderBy(o => o.OrderId).FirstOrDefault();
 
-            return await result.ToListAsync();
+            if (order == null)
+            {
+                order = new Order()
+                {
+                    Cache = JsonConvert.SerializeObject(new List<List<int>>
+                        {
+                            new List<int>() { 0 }
+                        })
+                };
+
+                Orders.Add(order);
+
+                SaveChanges();
+            }
+
+            Entry(order).Collection(o => o.Points).Load();
+
+            var point = new Point()
+            {
+                From = from,
+                To = to,
+                Volume = order.Points.Count() + 1,
+
+            };
+            order.Points.Add(point);
+
+            SaveChanges();
+
+            UpdateCache(order, point);
         }
 
-        public async Task<bool> AddParent(DataClassParentView data)
+        public void UpdateCache(Order order, Point point)
         {
-            await DataClassParentTable.AddAsync(new DataClassParent(data));
+            var cache = JsonConvert.DeserializeObject<List<List<int>>>(order.Cache);
 
-            var count = await SaveChangesAsync();
+            var tmp = new List<int>();
 
-            return count > 0 ? true : false;
+            cache.Insert(1, new List<int>());
+            cache.Add(new List<int>());
+
+            List<int> source;
+            //set old columns 
+            for (int i = 0, j = cache.Count - 1; i < cache.Count - 1; i++)
+            {
+                if (i == 1) continue;
+
+                source = cache[i];
+
+                if(i == 0)
+                {
+                    var origin = Units.OrderBy(u => u.UnitId).First().Origin;
+                    source.Insert(1, Convert.ToInt32((GoogleService.GoogleRequest(origin, point.To)).Item2));
+
+                    source.Add(Convert.ToInt32((GoogleService.GoogleRequest(origin, point.From)).Item2));
+
+                    continue;
+                }
+                var dbPoint = Points.First(p => p.Index.Equals(i));
+                if (i <= cache.Count / 2)
+                {
+                    source.Insert(1, Convert.ToInt32((GoogleService.GoogleRequest(dbPoint.To, point.To)).Item2));
+
+                    source.Add(Convert.ToInt32((GoogleService.GoogleRequest(dbPoint.To, point.From)).Item2));
+                    j--;
+                }
+                else
+                {
+                    source.Insert(1, Convert.ToInt32((GoogleService.GoogleRequest(dbPoint.From, point.To)).Item2));
+
+                    source.Add(Convert.ToInt32((GoogleService.GoogleRequest(dbPoint.From, point.From)).Item2));
+                    j++;
+                }
+            }
+            //END set old columns
+
+            //set new columns
+            source = cache[1];
+            for(int i = 0; i < cache.Count - 1; i++)
+            {
+                if(i == 1)
+                {
+                    source.Add(0);
+                    continue;
+                }
+                var dist = cache[i][1];
+                source.Add(dist);
+            }
+            source.Add(Convert.ToInt32((GoogleService.GoogleRequest(point.From, point.To)).Item2));
+
+            source = cache[cache.Count - 1];
+            for (int i = 0; i < cache.Count - 1; i++)
+            {
+                var dist = cache[i][cache.Count - 1];
+                source.Add(dist);
+            }
+            source.Add(0);
+
+            //END set new columns
+            order.Cache = JsonConvert.SerializeObject(cache);
+
+            this.SaveChanges();
+        }
+
+        public void GetData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Cleane()
+        {
+            Units.RemoveRange(Units.ToList());
+            Orders.RemoveRange(Orders.ToList());
+            Points.RemoveRange(Points.ToList());
         }
     }
-
-    public class DataClassParent: DataClassParentView
+    public class Unit
     {
-        public DataClassParent() { DataClassChildList = new List<DataClassChild>(); }
-        public DataClassParent(DataClassParentView data) : base()
-        {
-            Data = data.Data;
-        }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int UnitId { get; set; }
+        [Required]
+        public int Volume { get; set; }
+        [Required]
+        public string Origin { get; set; }
+    }
+    public class Order
+    {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int OrderId { get; set; }
+        [Required]
+        public string Cache { get; set; }
         //children
-        public ICollection<DataClassChild> DataClassChildList { get; set; }
+        public Order() { Points = new List<Point>(); }
+        public ICollection<Point> Points { get; set; }
     }
-    public class DataClassChild: DataClassChildView
+    public class Point
     {
-        [ForeignKey(nameof(DataClassParent))]
-        public int ParentId { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int PointId { get; set; }
+        [Required, ForeignKey(nameof(Order))]
+        public int OrderId { get; set; }
 
+        [Required, MaxLength(40)]
+        public string From { get; set; }
+        [Required, MaxLength(40)]
+        public string To { get; set; }
+        [Required]
+        public int Volume { get; set; }
+        [Required]
+        public int Index { get; set; }
         //parent
-        public DataClassParent DataClassParent { get; set; }
+        public Order Order { get; set; }
     }
 }

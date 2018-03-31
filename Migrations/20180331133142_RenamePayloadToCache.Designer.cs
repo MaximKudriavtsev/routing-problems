@@ -11,9 +11,10 @@ using System;
 namespace CoreReactRedux.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20180331133142_RenamePayloadToCache")]
+    partial class RenamePayloadToCache
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,15 +43,13 @@ namespace CoreReactRedux.Migrations
                         .IsRequired()
                         .HasMaxLength(40);
 
-                    b.Property<int>("Index");
-
                     b.Property<int>("OrderId");
 
                     b.Property<string>("To")
                         .IsRequired()
                         .HasMaxLength(40);
 
-                    b.Property<int>("Volume");
+                    b.Property<double>("Volume");
 
                     b.HasKey("PointId");
 
@@ -64,10 +63,7 @@ namespace CoreReactRedux.Migrations
                     b.Property<int>("UnitId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Origin")
-                        .IsRequired();
-
-                    b.Property<int>("Volume");
+                    b.Property<double>("Volume");
 
                     b.HasKey("UnitId");
 
