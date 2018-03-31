@@ -5,14 +5,15 @@ import * as actionCreators from "./actions";
 import { ModalMap } from './modal-map';
 
 class ModalWindow extends React.PureComponent {
-  onButtonAddClick = (_lat, _lng, _volume) => {
-    addRow({ from: _lat, to: _lng, volume: _volume });
-    toggleModal();
-  };
   render() {
     const { toggleModal, setLat, setLng, addRow, setVolume } = this.props;
     const { showModal, lat, lng, volume } = this.props.main;
-
+    
+    const onButtonAddClick = (_lat, _lng, _volume) => {
+      debugger;
+      addRow({ from: _lat, to: _lng, volume: _volume });
+      toggleModal();
+    };
 
     return (
       <Modal
@@ -35,12 +36,12 @@ class ModalWindow extends React.PureComponent {
             <div className="input-group-prepend">
               <span className="input-group-text" id="basic-addon1">кг</span>
             </div>
-            <input onChange={setVolume} type="text" className="form-control" placeholder="Вес товара" aria-label="Username" aria-describedby="basic-addon1" />
+            <input onChange={e => setVolume(e.target.value)} type="text" className="form-control" placeholder="Вес товара" aria-label="Username" aria-describedby="basic-addon1" />
           </div>
         </ModalBody>
         <ModalFooter>
           <Button
-            onClick={() => this.onButtonAddClick(lat, lng, volume)}
+            onClick={() => onButtonAddClick(lat, lng, volume)}
           >
             Добавить
           </Button>
