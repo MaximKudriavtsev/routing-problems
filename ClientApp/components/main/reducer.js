@@ -10,6 +10,7 @@ export const State = {
       { id: 2, from: "-33.950198,151.259302", to: "-33.923036,151.157507", volume: "150" },
     ],
     volume: 0,
+    loading: false
 }
 
 // locations = [
@@ -22,6 +23,18 @@ export const State = {
 
 export const reducer = (state = State, action) => {
     switch (action.type) {
+        case 'LOADING': {
+            return {
+                ...state,
+                loading: true
+            };
+        }
+        case 'RESPONSE': {
+            return {
+                ...state,
+                loading: false
+            };
+        }
         case 'SET_LAT':  {
             if (state.lat !== action.payload) {
                 return {
