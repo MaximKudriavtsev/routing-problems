@@ -36,7 +36,7 @@ export const DivWrapper = styled.div`
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: lightgreen;
+        background-color: #3f9bff;
         -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
                 animation: sk-foldCubeAngle 2.4s infinite linear both;
         -webkit-transform-origin: 100% 100%;
