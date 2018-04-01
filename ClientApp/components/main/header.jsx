@@ -5,9 +5,7 @@ export default class Header extends React.PureComponent {
   render() {
     return (
       <CardHeader>
-        <h5>
-          Текущие заказы
-        </h5>
+        <h5>Текущие заказы</h5>
       </CardHeader>
     );
   }
