@@ -30,8 +30,7 @@ namespace CoreReactRedux.Controllers
         [HttpPost("[action]")]
         public string AddPoint([FromBody] List<JsonRequest> json)
         {
-            foreach (var item in json)
-                _db.AddNewPoint(item.from, item.to, Convert.ToInt32(item.volume));
+            _db.AddNewPoints(json);
 
             var tuple = _db.GetTableString();
             var table = JsonConvert.DeserializeObject<List<List<int>>>(tuple.Item2);

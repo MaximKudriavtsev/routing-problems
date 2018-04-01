@@ -18,14 +18,6 @@ namespace CoreReactRedux.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<Point> Points { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //}
-
-        //public async Task<Unit> CreateNewUnit()
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public void GetUnit()
         {
@@ -34,6 +26,7 @@ namespace CoreReactRedux.Models
 
         public void AddNewPoint(string from, string to, int volume)
         {
+            var origin = Units.OrderBy(u => u.UnitId).First().Origin;
             var order = Orders.OrderBy(o => o.OrderId).FirstOrDefault();
 
             if (order == null)
@@ -62,7 +55,46 @@ namespace CoreReactRedux.Models
             };
             order.Points.Add(point);
 
-            UpdateCache(order, point);
+            UpdateCache(order, point, origin);
+
+            SaveChanges();
+        }
+
+        public void AddNewPoints(List<JsonRequest> json)
+        {
+            var origin = Units.OrderBy(u => u.UnitId).First().Origin;
+            var order = Orders.OrderBy(o => o.OrderId).FirstOrDefault();
+
+            if (order == null)
+            {
+                order = new Order()
+                {
+                    Cache = JsonConvert.SerializeObject(new List<List<int>>
+                        {
+                            new List<int>() { 0 }
+                        })
+                };
+
+                Orders.Add(order);
+
+                SaveChanges();
+            }
+
+            Entry(order).Collection(o => o.Points).Load();
+            foreach(var item in json)
+            {
+                var point = new Point()
+                {
+                    From = item.from,
+                    To = item.to,
+                    Volume = Convert.ToInt32(item.volume),
+                    Index = order.Points.Count() + 1,
+                };
+
+                order.Points.Add(point);
+
+                UpdateCache(order, point, origin);
+            }
 
             SaveChanges();
         }
@@ -113,7 +145,7 @@ namespace CoreReactRedux.Models
             return result;
         }
 
-        public void UpdateCache(Order order, Point point)
+        public void UpdateCache(Order order, Point point, string origin)
         {
             var cache = JsonConvert.DeserializeObject<List<List<int>>>(order.Cache);
 
@@ -132,7 +164,6 @@ namespace CoreReactRedux.Models
 
                 if (i == 0)
                 {
-                    var origin = Units.OrderBy(u => u.UnitId).First().Origin;
                     source.Insert(1, Convert.ToInt32((GoogleService.GoogleRequest(origin, point.To)).Item2));
 
                     source.Add(Convert.ToInt32((GoogleService.GoogleRequest(origin, point.From)).Item2));
@@ -141,7 +172,7 @@ namespace CoreReactRedux.Models
                 }
                 if (i <= cache.Count / 2)
                 {
-                    var dbPoint = Points.First(p => p.Index.Equals(j));
+                    var dbPoint = order.Points.First(p => p.Index.Equals(j));
                     j--;
 
                     source.Insert(1, Convert.ToInt32((GoogleService.GoogleRequest(dbPoint.To, point.To)).Item2));
@@ -151,7 +182,7 @@ namespace CoreReactRedux.Models
                 else
                 {
                     j++;
-                    var dbPoint = Points.First(p => p.Index.Equals(j));
+                    var dbPoint = order.Points.First(p => p.Index.Equals(j));
 
                     source.Insert(1, Convert.ToInt32((GoogleService.GoogleRequest(dbPoint.From, point.To)).Item2));
 
