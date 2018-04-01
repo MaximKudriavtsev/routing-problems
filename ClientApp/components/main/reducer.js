@@ -31,9 +31,13 @@ export const reducer = (state = State, action) => {
             };
         }
         case 'RESPONSE': {
+            debugger;
+
+            
             return {
                 ...state,
-                loading: false
+                loading: false,
+                resultPoints: action.payload
             };
         }
         case 'ERROR': {
