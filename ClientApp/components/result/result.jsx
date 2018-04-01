@@ -10,16 +10,25 @@ class Result extends React.PureComponent {
     let template;
     if (loading) {
       template = () => (<div>Загрузка машины...</div>);
-    } else if (resultPoints.length !== 0) { // !!!!!!!!!!!!!!!S
+    } else if (resultPoints.length === 0) { // !!!!!!!!!!!!!!!S
       template = () => (<div>Маршрут не построен</div>);
     } else {
+      const points = [];
+      resultPoints.forEach((pair, index) => {
+          const lat = pair.from.split(',')[0] * 1;
+          const lng = pair.from.split(',')[1] * 1;
+          points.push({ lat, lng });
+        if (index === resultPoints.length - 1) {
+          points.push(points[0]);
+        }
+      });
       template = () => (
         <Card style={{ marginTop: '20px' }}>
           <CardHeader>
             Маршрут
           </CardHeader>
           <CardBody>
-            <MapContainer />
+            <MapContainer points4={points}/>
           </CardBody>
         </Card>
       );
