@@ -32,7 +32,6 @@ export const MapDirection = compose(
         travelMode: google.maps.TravelMode.DRIVING,
       }, (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
-          debugger;
           this.setState({
             directions: result,
           });
@@ -45,11 +44,10 @@ export const MapDirection = compose(
   })
 )(props => {
   const { directions } = props;
-  debugger
   return (
     <GoogleMap
       defaultZoom={7}
-      defaultCenter={new google.maps.LatLng(41.8507300, -87.6512600)}
+      defaultCenter={new google.maps.LatLng(54.2048, 37.6185)}
     >
       <DirectionsRenderer directions={directions} />
     </GoogleMap>

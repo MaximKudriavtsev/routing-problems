@@ -4,7 +4,8 @@ export default class Header extends React.PureComponent {
   render() {
     return (
       <header className="navbar navbar-expand navbar-dark">
-        <h2>Reactive Core</h2>
+        <i src="./logo.png" />
+        <h2>Calculating Optimal Path</h2>
       </header>
     );
   }

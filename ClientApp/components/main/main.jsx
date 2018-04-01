@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, CardBody } from 'reactstrap';
+import { Card } from 'reactstrap';
 import { connect } from 'react-redux';
 import * as actionCreators from "./actions";
 import Title from './header';
@@ -26,9 +26,7 @@ class Main extends React.PureComponent {
         }
         <Card>
           <Title />
-          <CardBody>
             <Grid rows={rows} />
-          </CardBody>
           <ControlPanel />
           <ModalWindow />
         </Card>

@@ -11,7 +11,7 @@ class Result extends React.PureComponent {
     return (
           <Card style={{ marginTop: '20px' }}>
           <CardHeader>
-            Маршрут
+            <h5>Маршрут</h5>
           </CardHeader>
           <CardBody>
             <MapDirection pointPairs={resultPoints} />

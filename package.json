@@ -1,6 +1,7 @@
 {
   "name": "core_react_redux",
-  "version": "0.0.1",
+  "version": "1.0.0",
+  "author": "Maxim Kudryavtsev, Dmitry Koshkin, Vanya Tugolukov, Victoria Hanieva, Anastasia Nikitina <3",
   "description": "rail_core_react_redux",
   "scripts": {
     "clean": "IF EXIST %CD%\\wwwroot\\dist rd /s /q %CD%\\wwwroot\\dist && IF EXIST %CD%\\ClientApp\\dist rd /s /q %CD%\\ClientApp\\dist",
