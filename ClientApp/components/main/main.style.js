@@ -10,8 +10,8 @@ export const DivWrapper = styled.div`
     background-color: rgba(0,0,0,0.8);
 
     .sk-folding-cube {
-        top: 40vh;
-        left: 40vw;
+        top: 46vh;
+        left: 46vw;
         width: 100px;
         z-index: 10;
         height: 100px;
