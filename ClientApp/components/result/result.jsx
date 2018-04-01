@@ -3,6 +3,8 @@ import { Card, CardHeader, CardBody } from 'reactstrap';
 import { connect } from 'react-redux';
 import * as actionCreators from "../main/actions";
 import MapContainer from './map-container';
+import { MapDirection } from './map-direction';
+
 
 class Result extends React.PureComponent {
   render() {
@@ -33,7 +35,11 @@ class Result extends React.PureComponent {
         </Card>
       );
     }
-    return template();
+    return ( <React.Fragment>
+        {template()}
+        <MapDirection pointPairs={resultPoints} />
+      </React.Fragment>
+    );
   }
 }
 
