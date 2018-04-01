@@ -30,9 +30,6 @@ export const reducer = (state = State, action) => {
             };
         }
         case 'RESPONSE': {
-            debugger;
-
-            
             return {
                 ...state,
                 loading: false,
@@ -96,7 +93,6 @@ export const reducer = (state = State, action) => {
         }
 
         case 'ADD_ROW': {
-        debugger;
         let { rows } = state;
         const startingAddedId = (rows.length - 1) > 0 ? rows[rows.length - 1].id + 1 : 0;
         const nextRows = rows.slice();

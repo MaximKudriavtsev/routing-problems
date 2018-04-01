@@ -55,7 +55,9 @@ export const postData = (text) => (dispatch) => {
       body: JSON.stringify(text)
   }).then(val => {
       console.log(val);
-      dispatch({ type: 'RESPONSE' });
+      return val.json();    
+  }).then(value => {
+    dispatch({ type: 'RESPONSE', payload: value });
   }).catch(err => {
       console.log(err);
       dispatch({ type: 'ERROR' });
