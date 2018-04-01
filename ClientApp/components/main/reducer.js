@@ -9,7 +9,8 @@ export const State = {
       { id: 1, from: "57.6261,39.8845", to: "55.8304,49.0661", volume: "100" },
     ],
     volume: 0,
-    loading: false
+    loading: false,
+    resultPoints: []
 }
 
 // locations = [
@@ -29,6 +30,16 @@ export const reducer = (state = State, action) => {
             };
         }
         case 'RESPONSE': {
+            debugger;
+
+            
+            return {
+                ...state,
+                loading: false,
+                resultPoints: action.payload
+            };
+        }
+        case 'ERROR': {
             return {
                 ...state,
                 loading: false

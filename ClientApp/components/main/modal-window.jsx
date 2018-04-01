@@ -26,6 +26,7 @@ class ModalWindow extends React.PureComponent {
         <ModalBody>
           <ModalMap
             setData={setFrom}
+            from
           />
           <ModalMap
             setData={setTo}
