@@ -1,11 +1,10 @@
 import * as React from 'react';
-const _ = require("lodash");
 import { GoogleMap, withGoogleMap, withScriptjs, Marker } from "react-google-maps";  
 
 const MapWithAMarker = withScriptjs(withGoogleMap((props) => {
   return (
     <GoogleMap
-      defaultZoom={8}
+      defaultZoom={9}
       defaultCenter={props.center}
     >
       {props.markers(props.locations)}
@@ -31,7 +30,13 @@ export default class MapContainer extends React.PureComponent {
       { lat: -34.028249, lng: 151.157507 },
       { lat: -33.950198, lng: 151.259302 },
     ];
-    const nextCenter = _.get(locations, '0.position', this.state.center);
+    const nextCenter2 = locations.reduce((acc, location) => {
+      acc.lat += location.lat;
+      acc.lng += location.lng;
+      return acc;
+    });
+    nextCenter2.lng /= locations.length;
+    nextCenter2.lat /= locations.length;
     const points = locations => locations.map(location => (
       <Marker key={location.lat} position={{ lat: location.lat, lng: location.lng }} />
     ));
@@ -44,7 +49,7 @@ export default class MapContainer extends React.PureComponent {
         mapElement={<div style={{ height: `100%` }} />}
         markers={points}
         locations={locations}
-        center={nextCenter}
+        center={nextCenter2}
       />
     );
   }
