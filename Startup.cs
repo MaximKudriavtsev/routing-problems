@@ -23,26 +23,26 @@ namespace CoreReactRedux
 
         public void CreateFirst(IServiceProvider serviceProvider)
         {
-            var db = serviceProvider.GetRequiredService<DataBaseContext>();
-
-            db.Database.Migrate();
-            var unitFromDb = db.Units.OrderBy(u => u.UnitId).FirstOrDefault();
-            if (unitFromDb == null)
+            using (var db = serviceProvider.GetRequiredService<DataBaseContext>())
             {
-                var unitsConfig = Configuration.GetSection("units").GetChildren();
-                foreach (var unitConfig in unitsConfig)
+                db.Database.Migrate();
+                db.Cleane();
+                var unitFromDb = db.Units.OrderBy(u => u.UnitId).FirstOrDefault();
+                if (unitFromDb == null)
                 {
-                    var unit = new Unit()
+                    var unitsConfig = Configuration.GetSection("units").GetChildren();
+                    foreach (var unitConfig in unitsConfig)
                     {
-                        Origin = unitConfig["origin"],
-                        Volume = Convert.ToInt32(unitConfig["volume"])
-                    };
-                    db.Units.Add(unit);
+                        var unit = new Unit()
+                        {
+                            Origin = unitConfig["origin"],
+                            Volume = Convert.ToInt32(unitConfig["volume"])
+                        };
+                        db.Units.Add(unit);
+                    }
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
             }
-
-            db.Dispose();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

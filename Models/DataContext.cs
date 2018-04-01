@@ -57,19 +57,19 @@ namespace CoreReactRedux.Models
             {
                 From = from,
                 To = to,
-                Volume = order.Points.Count() + 1,
-
+                Volume = volume,
+                Index = order.Points.Count() + 1,
             };
             order.Points.Add(point);
 
-            SaveChanges();
-
             UpdateCache(order, point);
+
+            SaveChanges();
         }
 
         public List<JsonResponse> CalcResult(List<int> source)
         {
-            var half = source.Count / 2;
+            var half = source.Count / 2 - 1;
             var result = new List<JsonResponse>();
 
             var unit = Units.OrderBy(u => u.UnitId).First();
@@ -80,9 +80,19 @@ namespace CoreReactRedux.Models
             var points = order.Points;
 
             var start = unit.Origin;
-            for(int i = 0; i < source.Count - 1; i++)
+            for(int i = 1; i < source.Count - 1; i++)
             {
-                var dot = source[i] - half;
+                int dot;
+
+                if (source[i] > half)
+                {
+                    dot = source[i] - half;
+                }
+                else
+                {
+                    dot = source[i] - half - 1;
+                }
+
                 var point = points.First(p => p.Index.Equals(Math.Abs(dot)));
 
                 result.Add(new JsonResponse()
@@ -114,7 +124,7 @@ namespace CoreReactRedux.Models
 
             List<int> source;
             //set old columns 
-            for (int i = 0, j = cache.Count - 1; i < cache.Count - 1; i++)
+            for (int i = 0, j = cache.Count / 2 - 1; i < cache.Count - 1; i++)
             {
                 if (i == 1) continue;
 
@@ -129,20 +139,23 @@ namespace CoreReactRedux.Models
 
                     continue;
                 }
-                var dbPoint = Points.First(p => p.Index.Equals(i));
                 if (i <= cache.Count / 2)
                 {
+                    var dbPoint = Points.First(p => p.Index.Equals(j));
+                    j--;
+
                     source.Insert(1, Convert.ToInt32((GoogleService.GoogleRequest(dbPoint.To, point.To)).Item2));
 
                     source.Add(Convert.ToInt32((GoogleService.GoogleRequest(dbPoint.To, point.From)).Item2));
-                    j--;
                 }
                 else
                 {
+                    j++;
+                    var dbPoint = Points.First(p => p.Index.Equals(j));
+
                     source.Insert(1, Convert.ToInt32((GoogleService.GoogleRequest(dbPoint.From, point.To)).Item2));
 
                     source.Add(Convert.ToInt32((GoogleService.GoogleRequest(dbPoint.From, point.From)).Item2));
-                    j++;
                 }
             }
             //END set old columns
@@ -171,8 +184,6 @@ namespace CoreReactRedux.Models
 
             //END set new columns
             order.Cache = JsonConvert.SerializeObject(cache);
-
-            this.SaveChanges();
         }
 
         public ValueTuple<List<int>, string> GetTableString()
@@ -197,9 +208,10 @@ namespace CoreReactRedux.Models
 
         public void Cleane()
         {
-            Units.RemoveRange(Units.ToList());
             Orders.RemoveRange(Orders.ToList());
             Points.RemoveRange(Points.ToList());
+
+            SaveChanges();
         }
     }
     public class Unit

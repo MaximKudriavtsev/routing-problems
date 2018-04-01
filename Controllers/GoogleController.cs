@@ -39,7 +39,7 @@ namespace CoreReactRedux.Controllers
             var result = new CalcTable(table, tuple.Item1).CalcOutValues();
 
             var response = _db.CalcResult(result);
-
+            _db.Cleane();
             return JsonConvert.SerializeObject(response);
         }
 
